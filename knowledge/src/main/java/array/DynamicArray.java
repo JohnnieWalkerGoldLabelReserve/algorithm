@@ -104,9 +104,15 @@ public class DynamicArray<E> {
         return ret;
     }
 
+
+    public E getFrist() {
+        return (E) data[0];
+    }
+
     public E removeFirst() {
         return remove(0);
     }
+
 
     public E removeLast() {
         return remove(size - 1);
