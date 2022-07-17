@@ -2,9 +2,10 @@ package queue;
 
 import array.DynamicArray;
 
+@SuppressWarnings("unused")
 public class ArrayQueue<E> implements Queue<E> {
 
-    private DynamicArray<E> dynamicArray;
+    private final DynamicArray<E> dynamicArray;
 
     public ArrayQueue() {
         this.dynamicArray = new DynamicArray<>();
