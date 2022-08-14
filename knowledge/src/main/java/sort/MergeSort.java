@@ -1,46 +1,61 @@
 package sort;
 
-public class MergeSort {
 
-    public static void sort(int[] arr) {
-        mergeSort(arr, 0, arr.length - 1);
-    }
+import java.util.Arrays;
 
+public class MergeSort implements Sort {
 
-    public static void mergeSort(int[] arr, int l, int r) {
-        if (l >= r) {
+    public static <E extends Comparable<E>> void mergeSort(E[] arr, int low, int hight) {
+        if (low >= hight) {
             return;
         }
-        int middle = (l + r) / 2;
-        mergeSort(arr, l, middle);
-        mergeSort(arr, middle + 1, r);
-        merge(arr, l, middle, r);
+        int middle = low + (hight - low) / 2;
+        mergeSort(arr, low, middle);
+        mergeSort(arr, middle + 1, hight);
+        merge(arr, low, middle, hight);
     }
 
-    public static void merge(int[] arr, int l, int mid, int r) {
-        int[] tmpArr = new int[r - l + 1];
-        int i = l;
-        int j = mid + 1;
-        int idx = 0;
-        while (i <= mid && j <= r) {
-            if (arr[i] < arr[j]) {
-                tmpArr[idx++] = arr[i];
+    public static <E extends Comparable<E>> void mergeSort2(E[] arr, int low, int hight) {
+        if (low >= hight) {
+            return;
+        }
+        int middle = low + (hight - low) / 2;
+        mergeSort(arr, low, middle);
+        mergeSort(arr, middle + 1, hight);
+        if (arr[middle].compareTo(arr[middle + 1]) > 0) {
+            merge(arr, low, middle, hight);
+        }
+    }
+
+    public static <E extends Comparable<E>> void merge(E[] arr, int low, int middle, int hight) {
+        //拷贝指定区间的数组
+        E[] copyArray = copyRangeArray(arr, low, hight + 1);
+        int i = low;
+        int j = middle + 1;
+        for (int k = low; k <= hight; k++) {
+            if (i > middle) {
+                arr[k] = copyArray[j - low];
+                j++;
+            } else if (j > hight) {
+                arr[k] = copyArray[i - low];
+                i++;
+            } else if (copyArray[i - low].compareTo(copyArray[j - low]) < 0) {
+                arr[k] = copyArray[i - low];
                 i++;
             } else {
-                tmpArr[idx++] = arr[j];
+                arr[k] = copyArray[j - low];
                 j++;
             }
         }
-        for (int tmp = i; tmp <= mid; tmp++) {
-            tmpArr[idx++] = arr[tmp];
-        }
-        for (int tmp = j; tmp <= r; tmp++) {
-            tmpArr[idx++] = arr[tmp];
-        }
-        idx = 0;
-        for (int tmp = l; tmp < r + 1; tmp++) {
-            arr[tmp] = tmpArr[idx++];
-        }
+    }
 
+
+    public static <E> E[] copyRangeArray(E[] arr, int low, int hight) {
+        return Arrays.copyOfRange(arr, low, hight);
+    }
+
+    @Override
+    public <E extends Comparable<E>> void sort(E[] arr) {
+        mergeSort(arr, 0, arr.length - 1);
     }
 }
