@@ -1,11 +1,13 @@
 package sort;
 
 
+import java.util.Random;
+
 public class QuickSort implements Sort {
 
     @Override
     public <E extends Comparable<E>> void sort(E[] arr) {
-        quickSort(arr, 0, arr.length - 1);
+        sort3Ways(arr, 0, arr.length - 1);
     }
 
     public <E extends Comparable<E>> void quickSort(E[] arr, int l, int r) {
@@ -17,7 +19,7 @@ public class QuickSort implements Sort {
     }
 
 
-    public <E extends Comparable<E>> int paratition(E[] arr, int l, int r) {
+    public <E extends Comparable<E>> int paratition2Way(E[] arr, int l, int r) {
         int j = l;
         int i = r;
         E cmp = arr[l];
@@ -36,6 +38,36 @@ public class QuickSort implements Sort {
         return j;
     }
 
+    public <E extends Comparable<E>> void sort3Ways(E[] arr, int l, int r) {
+        if (l >= r) {
+            return;
+        }
+        //randomSwap(arr, l, r);
+        // arr[lt+1,i] <v arr[i+1,gt] >v
+        int lt = l ;
+        int i = l+1;
+        int gt = r + 1;
+        E cmp = arr[l];
+        while (i < gt) {
+            // arr[i] < cmp
+            if (cmp.compareTo(arr[i]) > 0) {
+                lt++;
+                swap(arr, i, lt);
+                i++;
+            }
+            // arr[i] > cmp
+            else if (cmp.compareTo(arr[i]) < 0) {
+                gt--;
+                swap(arr, i, gt);
+            } else {
+                i++;
+            }
+        }
+        swap(arr, l, lt);
+        sort3Ways(arr, l, lt - 1);
+        sort3Ways(arr, gt, r);
+    }
+
     public <E extends Comparable<E>> int paratition2(E[] arr, int l, int r) {
         // arr[l+1,j] <v arr[j+1,i]>=v
         int j = l;
@@ -49,6 +81,11 @@ public class QuickSort implements Sort {
         return j;
     }
 
+    public <E extends Comparable<E>> void randomSwap(E[] arr, int l, int r) {
+        Random random = new Random();
+        int idx = l + random.nextInt(r - l - 1);
+        swap(arr, l, idx);
+    }
 
     public static void main(String[] args) {
         QuickSort mergeSort = new QuickSort();
