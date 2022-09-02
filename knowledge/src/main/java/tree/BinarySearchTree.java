@@ -1,6 +1,10 @@
 package tree;
 
 
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
+
 public class BinarySearchTree {
 
     private Node root;
@@ -141,6 +145,135 @@ public class BinarySearchTree {
         return res.toString();
     }
 
+    public void preOrderNR() {
+        Stack<Node> stack = new Stack<Node>();
+        if (null != root) {
+            stack.push(root);
+        }
+        while (!stack.isEmpty()) {
+            Node node = stack.pop();
+            System.err.println(node.val);
+            if (node.right != null) {
+                stack.push(node.right);
+            }
+            if (node.left != null) {
+                stack.push(node.left);
+            }
+        }
+    }
+
+    public void levelOrder() {
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            Node front = queue.remove();
+            System.out.println(front.val);
+            if (front.left != null) {
+                queue.add(front.left);
+            }
+            if (front.right != null) {
+                queue.add(front.right);
+            }
+        }
+    }
+
+    public int minimum() {
+        if (size == 0) {
+            throw new IllegalArgumentException("BTS is empty!");
+        }
+        return minimum(root).val;
+    }
+
+    private Node minimum(Node root) {
+        if (root.left == null) {
+            return root;
+        }
+        return minimum(root.left);
+    }
+
+    public int maximum() {
+        if (size == 0) {
+            throw new IllegalArgumentException("BTS is empty!");
+        }
+        return maxmum(root).val;
+    }
+
+    private Node maxmum(Node root) {
+        if (root.right == null) {
+            return root;
+        }
+        return maxmum(root.right);
+    }
+
+    public int removeMin() {
+        int delMin = minimum();
+        root = removeMin(root);
+        return delMin;
+    }
+
+    private Node removeMin(Node root) {
+        if (root.left == null) {
+            Node right = root.right;
+            root.right = null;
+            size--;
+            return right;
+        }
+        root.left = removeMin(root.left);
+        return root;
+    }
+
+    public int removeMax() {
+        int delMax = maximum();
+        root = removeMax(root);
+        return delMax;
+    }
+
+    private Node removeMax(Node root) {
+        if (root.right == null) {
+            Node left = root.left;
+            root.left = null;
+            size--;
+            return left;
+        }
+        root.right = removeMax(root.right);
+        return root;
+    }
+
+    public void remove(int val) {
+        root = remove(root, val);
+    }
+
+    private Node remove(Node root, int val) {
+        if (root == null) {
+            return null;
+        }
+        if (val < root.val) {
+            root.left = remove(root.left, val);
+        } else if (val > root.val) {
+            root.right = remove(root.right, val);
+        } else {
+            if (root.left == null) {
+                Node right = root.right;
+                root.right = null;
+                size--;
+                return right;
+            }
+            if (root.right == null) {
+                Node left = root.left;
+                root.left = null;
+                size--;
+                return left;
+            }
+            Node miniRight = minimum(root.right);
+            miniRight.right = removeMin(root.right);
+            miniRight.left = root.left;
+            root.left = null;
+            root.right = null;
+            return miniRight;
+        }
+       return root;
+    }
+
     static class Node {
 
         private int val;
@@ -158,6 +291,7 @@ public class BinarySearchTree {
         for (int i = 0; i < arr.length; i++) {
             bst.add(arr[i]);
         }
-        bst.postOrder();
+        bst.remove(3);
+        bst.levelOrder();
     }
 }
