@@ -155,4 +155,10 @@ public class DynamicArray<E> {
     public E getLast() {
         return get(size - 1);
     }
+
+    public void swap(int l, int r) {
+        Object tmp = data[l];
+        data[l] = data[r];
+        data[r] = tmp;
+    }
 }
