@@ -2,6 +2,7 @@ package array;
 
 @SuppressWarnings("unused")
 public class DynamicArray<E> {
+
     private Object[] data;
     private int size;
 
@@ -9,6 +10,14 @@ public class DynamicArray<E> {
     public DynamicArray(int capacity) {
         data = new Object[capacity];
         size = 0;
+    }
+
+    public DynamicArray(Object[] arr) {
+        data = new Object[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            data[i] = arr[i];
+        }
+        size = arr.length;
     }
 
     public DynamicArray() {
@@ -37,7 +46,9 @@ public class DynamicArray<E> {
             throw new IllegalArgumentException("resize failed! capacity is zero");
         }
         Object[] newData = new Object[capacity];
-        if (size >= 0) System.arraycopy(data, 0, newData, 0, size);
+        if (size >= 0) {
+            System.arraycopy(data, 0, newData, 0, size);
+        }
         data = newData;
     }
 
